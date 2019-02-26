@@ -1,11 +1,12 @@
-# Título del trabajo
-
-Descripción breve del proyecto a realizar (2-3 frases).
+# Título del trabajo: Concesionario
+Un programa de un concesionario de coches.
 
 ## Integrantes del equipo
 
-Nombres, apellidos, y usuario GitHub de los integrantes del equipo.
+Hugo Rivera Rodríguez (54177) Javier Benavides Muñoz (53842) Miguel Angel Rodrigo  (54179)
 
 ## Objetivos del trabajo
 
-Lista de los objetivos que se persiguen con el trabajo propuesto.
+Crear un programa que ayude al vendededor a llevar un registro de los coches en venta:
+en funcion del año, el modelo, el precio ,de los km  que tenga y de los posibles benificios.
+
