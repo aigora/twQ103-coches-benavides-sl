@@ -3,7 +3,7 @@ Un programa de un concesionario de coches.
 
 ## Integrantes del equipo
 
-Hugo Rivera Rodríguez (54177) Javier Benavides Muñoz (53842) Miguel Angel Rodrigo  (54179)
+Hugo Rivera Rodríguez, Javier Benavides Muñoz, Miguel Angel Rodrigo 
 
 ## Objetivos del trabajo
 
