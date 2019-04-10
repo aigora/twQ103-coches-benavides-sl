@@ -1,6 +1,7 @@
 // Trabajo de Hugo Rivera, Miguel �ngel Rodrigo y Javier Benavides Q-103
 #include<stdio.h>
-
+#include<math.h>
+#include<string.h>
 
 int main()
 {
