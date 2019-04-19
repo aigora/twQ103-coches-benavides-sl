@@ -21,13 +21,17 @@ typedef struct{
 
 
 //Funciones que se van a necesitar
-int registracoche( );
+int registracoche();
 int muestrainventario();
+int cuentalineas();
+int buscanuevos();//Buscará los coches que son nuevos, es decir los que han recorrido 0 Km
 
 int main()
 {
-	int a,b,c; //para los switch-case
+	int a,b,c,num; //para los switch-case
 	printf("\n*****BIENVENIDO A COCHES BENAVIDES %c, su concesionatio de confianza*****\n",169);
+	num=cuentalineas();
+	printf("Numero de coches en el catalago: %d\n",num);
 	//Función para identificar al empleado que usa el programa, constará de nombre y contraseña
 	do
 	{	
@@ -47,7 +51,7 @@ int main()
 			case 3:// para las funciones de buscar
 				do
 				{
-					printf("\n1:Por marca \n2:Por matricula \n3:Volver\n");
+					printf("\n1:Por marca \n2:Buscar coches nuevos \n3:Volver\n");
 					scanf("%i",&b);
 					switch(b)
 					{
@@ -56,7 +60,7 @@ int main()
 						break;
 						
 						case 2:
-							//funcion para buscar por matricula
+							buscanuevos();
 						break;
 						
 						case 3:
@@ -194,5 +198,59 @@ int muestrainventario( )
 		}
 	}
 	fclose(pcoches); 
+	return 0;
+}
+
+int cuentalineas()
+{
+	FILE *pcoches;
+	int N=0;// numero de lineas
+	char c;
+	pcoches = fopen("Concesionario.txt", "r");
+	
+	if (pcoches == NULL)
+	{
+		printf("Error al abrir el fichero.\n");
+		return -1;
+	}
+	else
+	{
+		while (fscanf(pcoches, "%c", &c) != EOF)
+		{
+			if (c == '\n') // va aumentando el numero de lineas
+				N++;
+		}
+		printf("\nHay %d coches.\n",N);
+	}
+	fclose(pcoches); 
+	return N;//Devuelve un valor que es el número de saltos de línea contados
+}
+
+int buscanuevos()
+{
+	int i=0, marcaexiste=0,N=cuentalineas();
+	coches cochenuevo[N];
+	FILE *pcoches;
+	pcoches=fopen("Concesionario.txt","r");
+	fflush(stdin);
+	printf("Buscando coches nuevos en nuestro registro:\n");
+	while (feof(pcoches) == 0) // Leemos el fichero 
+	{  
+		fscanf(pcoches, "%[^;]; %[^;]; %d; %f; %f; %[^;]; %d; ", cochenuevo[i].marca,cochenuevo[i].modelo,&cochenuevo[i].year,&cochenuevo[i].precio,&cochenuevo[i].kmrecorridos,&cochenuevo[i].matricula,&cochenuevo[i].vendido);
+		i++;
+	}
+	for(i=0;i<N;i++)
+	{
+		if(0==cochenuevo[i].kmrecorridos)
+		{
+			printf("%s %s %d %.2f %.2f %s\n",cochenuevo[i].marca,cochenuevo[i].modelo,cochenuevo[i].year,cochenuevo[i].precio,cochenuevo[i].kmrecorridos,cochenuevo[i].matricula);
+			marcaexiste=1;
+		}
+	}
+	if (marcaexiste<1)
+	{
+		printf("No hay coches nuevos actualmente");
+	}
+	fclose(pcoches);
 	return 0;
 }
