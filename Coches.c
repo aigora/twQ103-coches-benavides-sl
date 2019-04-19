@@ -10,7 +10,7 @@ typedef struct{
 	int year;
 	float precio;
 	float kmrecorridos;//Si son 0 se le dará la categoría de nuevo
-	int matricula[8];//Las matrículas constan de 4 números y de tres letras
+	char matricula[8];//Las matrículas constan de 4 números y de tres letras
 	int vendido;// Valdrá 1 si se ha vendido, valdrá 0 si no se ha vendido
 }coches;
 
@@ -37,7 +37,7 @@ int main()
 		switch (a)
 		{
 			case 1:
-				registracoche( );
+				registracoche();
 			break;
 				
 			case 2:
@@ -100,7 +100,7 @@ int main()
 				printf("\nOpcion no disponible.\n");
 			break;
 		}
-		system("cls");
+		//system("cls");
 	} while(a!=5);
 	return 0;
 }
@@ -122,12 +122,12 @@ int registracoche( )
 		fflush(stdin);
 		printf("\nMarca del coche:\n");
 		scanf("%[^\n]", cochenuevo.marca);
-		fprintf(pcoches, "%s;\t\t\t", cochenuevo.marca);
+		fprintf(pcoches, "\n%s; ", cochenuevo.marca);
 		
 		fflush(stdin);
 		printf("\nModelo del coche:\n");
 		scanf("%[^\n]", cochenuevo.modelo);
-		fprintf(pcoches, "%s;\t\t\t", cochenuevo.modelo);
+		fprintf(pcoches, "%s; ", cochenuevo.modelo);
 		
 		printf("\nA%co de fabricacion del coche:\n", 164);
 		scanf("%d",&cochenuevo.year);
@@ -137,7 +137,7 @@ int registracoche( )
 			return -1;
 		}
 		else
-		fprintf(pcoches, "%d;\t", cochenuevo.year);
+		fprintf(pcoches, "%d; ", cochenuevo.year);
 		
 		printf("\nPrecio del coche:\n");
 		scanf("%f",&cochenuevo.precio);
@@ -147,7 +147,7 @@ int registracoche( )
 			return -1;
 		}
 		else
-			fprintf(pcoches, "%.2f;", cochenuevo.precio);
+			fprintf(pcoches, "%.2f; ", cochenuevo.precio);
 		
 		printf("\nKilometros recorridos por el coche:\n");
 		scanf("%f",&cochenuevo.kmrecorridos);
@@ -157,15 +157,15 @@ int registracoche( )
 			return -1;
 		}
 		else
-			fprintf(pcoches, "%.2f;", cochenuevo.kmrecorridos);
+			fprintf(pcoches, "%.2f; ", cochenuevo.kmrecorridos);
 		
 		printf("\nIntroduzca la matricula del coche:\n");
 		fflush(stdin);
 		scanf("%[^\n]", cochenuevo.matricula);
-		fprintf(pcoches, "%s;\t\t\t", cochenuevo.matricula);
+		fprintf(pcoches, "%s; ", cochenuevo.matricula);
 		
 		cochenuevo.vendido=0;
-		fprintf(pcoches,"%d;\n",cochenuevo.vendido);
+		fprintf(pcoches,"%d;",cochenuevo.vendido);
 		
 		printf("\nCoche registrado correctamente.\n");
 	}
@@ -177,7 +177,7 @@ int muestrainventario( )
 {
 	coches cochenuevo;
 	FILE *pcoches;
-	pcoches=fopen("Concesionario.txt","a");
+	pcoches=fopen("Concesionario.txt","r");
 	
 	if (pcoches == NULL)
 	{
@@ -186,11 +186,11 @@ int muestrainventario( )
 	}
 	else
 	{
-		printf("\nMarca\t\t\tModelo\t\t\tA%co\t\t\tPrecio\t\t\tKilometros recorridos\t\t\tMatricula\n\n",164);
-		while (feof(pcoches) == 0) // Leemos el fichero y mostramos las peliculas
+		//printf("\nMarca\t\t\tModelo\t\t\tA%co\t\t\tPrecio\t\t\tKilometros recorridos\t\t\tMatricula\n\n",164);
+		while (feof(pcoches) == 0) // Leemos el fichero y mostramos los coches
 		{  
-			fscanf(pcoches, "%[^;]; [^;]; %d; %f; %f; %d; ", cochenuevo.marca,cochenuevo.modelo,&cochenuevo.year,&cochenuevo.precio,&cochenuevo.kmrecorridos,&cochenuevo.matricula);
-			printf("%-40s\t%-40s\t%d\t%.2f\t%.2f\t%d\n",cochenuevo.marca,cochenuevo.modelo,cochenuevo.year,cochenuevo.precio,cochenuevo.kmrecorridos,cochenuevo.matricula);
+			fscanf(pcoches, "%[^;]; %[^;]; %d; %f; %f; %[^;]; %d; ", cochenuevo.marca,cochenuevo.modelo,&cochenuevo.year,&cochenuevo.precio,&cochenuevo.kmrecorridos,&cochenuevo.matricula,&cochenuevo.vendido);
+			printf("%s %s %d %.2f %.2f %s\n",cochenuevo.marca,cochenuevo.modelo,cochenuevo.year,cochenuevo.precio,cochenuevo.kmrecorridos,cochenuevo.matricula);
 		}
 	}
 	fclose(pcoches); 
