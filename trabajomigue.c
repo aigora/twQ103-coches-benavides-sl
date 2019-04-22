@@ -1,4 +1,4 @@
-// Trabajo de Hugo Rivera, Miguel ?ngel Rodrigo y Javier Benavides Q-103
+// Trabajo de Hugo Rivera, Miguel Angel Rodrigo y Javier Benavides Q-103
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -9,21 +9,26 @@ typedef struct{
 	char modelo[30];
 	int year;
 	float precio;
-	float kmrecorridos;//Si son 0 se le dar? la categor?a de nuevo
-	char matricula[8];//Las matr?culas constan de 4 n?meros y de tres letras
-	int vendido;// Valdr? 1 si se ha vendido, valdr? 0 si no se ha vendido
+	float kmrecorridos;//Si son 0 se le dara la categoria de nuevo
+	char matricula[8];//Las matriculas constan de 4 numeros y de tres letras
+	int vendido;// Valdra 1 si se ha vendido, valdra 0 si no se ha vendido
 }coches;
 
 typedef struct{
 	char nombre[30];
 	int password;
 }usuario;
+ 
 
-
-//Funciones que se van a necesitar
+//Funciones que se van a usar
 int registracoche( );
 int muestrainventario();
 int cuentalineas();
+int buscamarca();
+int buscanuevos();
+int ordenaprecio();
+int ordenakilometros();
+
 
 int main()
 {
@@ -75,23 +80,19 @@ int main()
 			case 4:// para las funciones de ordenar
 				do
 				{
-					printf("\n1:Por kilometros \n2:Por marca \n3:Por precio \n4:Volver\n");
+					printf("\n1:Por kilometros \n2:Por precio \n3:Volver\n");
 					scanf("%i",&c);
 					switch(c)
 					{
 						case 1:
-							//funcion para buscar por kil?metros
+							ordenakilometros();
 						break;
 						
 						case 2:
-							//funcion para buscar por marca
-						break;
-						
-						case 3:
-							//funcion para buscar por precio
+							ordenaprecio();
 						break;
 							
-						case 4:
+						case 3:
 							printf("\nHas vuelto al inicio.\n");
 						break;
 					}	
@@ -229,7 +230,7 @@ int cuentalineas()
 int buscamarca( )
 {
 	int i=0,presente=0;
-	int N=cuentalineas( );//para saber el numero de peliculas
+	int N=cuentalineas( );//para saber el numero de coches
 	char marca[50];
 	coches cochenuevo[N];
 	
@@ -301,5 +302,97 @@ int buscamarca( )
 	fclose(pcoches);
 	return 0;
 }
+/*int buscamatricula()
+{
+	int i;
+	char tumatricula;
+	printf("introduzca la matricula que desea :\n");
+	
+	
+}
+*/
+
+int ordenaprecio()
+{
+	int i=0,j;
+	int N=cuentalineas();
+	coches cochenuevo[N],aux;
+	FILE *pcoches;
+	pcoches=fopen("Concesionario.txt","r");
+	
+	if (pcoches == NULL)
+     	{
+		printf("Error al abrir el fichero.\n");
+		return -1;
+     	}
+    else {
+	 
+	while (feof(pcoches) == 0) //Primero leemos los datos
+		{
+			fscanf(pcoches, "%[^;]; %[^;]; %d; %f; %f; %[^;]; %d; ",cochenuevo[i].marca,cochenuevo[i].modelo,&cochenuevo[i].year,&cochenuevo[i].precio,&cochenuevo[i].kmrecorridos,&cochenuevo[i].matricula,&cochenuevo[i].vendido);
+			i++;
+		}
 
 
+		//METODO BURBUJA:
+	for (i=0; i<N-1; i++) {
+		for (j=i+1; j<N-1; j++) { //bucle anidado
+			if (cochenuevo[i].precio>cochenuevo[j].precio){
+				aux=cochenuevo[i];
+				cochenuevo[i]=cochenuevo[j];
+				cochenuevo[j]=aux;
+			}
+		}
+	}
+	
+	//Imprimir forma ascendente:
+	printf ("\n Coches ordenados de menor a mayor segun su precio:\n");
+	for (i=0;i<N;i++){
+			printf("%s %s %d %.2f %.2f %s\n",cochenuevo[i].marca,cochenuevo[i].modelo,cochenuevo[i].year,cochenuevo[i].precio,cochenuevo[i].kmrecorridos,cochenuevo[i].matricula);
+}
+}
+return 0;
+fclose(pcoches);
+}
+int ordenakilometros()
+{
+	int i=0,j;
+	int N=cuentalineas();
+	coches cochenuevo[N],aux;
+	FILE *pcoches;
+	pcoches=fopen("Concesionario.txt","r");
+	
+	if (pcoches == NULL)
+     	{
+		printf("Error al abrir el fichero.\n");
+		return -1;
+     	}
+    else {
+	 
+	while (feof(pcoches) == 0) //Primero leemos los datos
+		{
+			fscanf(pcoches, "%[^;]; %[^;]; %d; %f; %f; %[^;]; %d; ",cochenuevo[i].marca,cochenuevo[i].modelo,&cochenuevo[i].year,&cochenuevo[i].precio,&cochenuevo[i].kmrecorridos,&cochenuevo[i].matricula,&cochenuevo[i].vendido);
+			i++;
+		}
+
+
+		//METODO BURBUJA:
+	for (i=0; i<N-1; i++) {
+		for (j=i+1; j<N-1; j++) { //bucle anidado
+			if (cochenuevo[i].kmrecorridos>cochenuevo[j].kmrecorridos){
+				aux=cochenuevo[i];
+				cochenuevo[i]=cochenuevo[j];
+				cochenuevo[j]=aux;
+			}
+		}
+	}
+	
+	//Imprimir forma ascendente:
+	printf ("\n Coches ordenados de menor a mayor segun la distancia que han recorrido:\n");
+	for (i=0;i<N;i++){
+			printf("%s %s %d %.2f %.2f %s\n",cochenuevo[i].marca,cochenuevo[i].modelo,cochenuevo[i].year,cochenuevo[i].precio,cochenuevo[i].kmrecorridos,cochenuevo[i].matricula);
+}
+}
+return 0;
+fclose(pcoches);
+}
