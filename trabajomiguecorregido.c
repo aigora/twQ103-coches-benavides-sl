@@ -32,6 +32,7 @@ int ordenaprecio();
 int ordenakilometros();
 int buscamatricula();
 int cuentalineasusuario();
+int compracoches();
 
 //FUNCION PRINCIAL
 int main()
@@ -80,7 +81,7 @@ system("cls");//borramos el control de usuario
 	printf("\n*****BIENVENIDO A COCHES BENAVIDES %c, su concesionatio de confianza*****\n",169);
 	do
 	{	
-		printf("\nQue desea hacer: \n1:Registrar coche \n2:Mostrar listado de coches \n3:Buscar coches \n4:Mostrar por orden especifico \n5:Salir\n");
+		printf("\nQue desea hacer: \n1:Registrar coche \n2:Mostrar listado de coches \n3:Buscar coches \n4:Ordenar por caracteristica \n5:Comprar coches \n6:Salir\n");
 		scanf("%i",&a);
 		
 		switch (a)
@@ -143,6 +144,9 @@ system("cls");//borramos el control de usuario
 			break;
 			
 			case 5:
+			 compracoche();
+			
+			case 6:
 				printf("\nSaliendo de Coches Benavides %c, su concesionario de confianza.\n",169);
 			break;		
 			
@@ -243,12 +247,74 @@ int muestrainventario( )
 		    
 			 printf("--------------------------------------------------------------------------\n");
 		  
-			printf("%s %s %d %.2f %.2f %s\n",cochenuevo.marca,cochenuevo.modelo,cochenuevo.year,cochenuevo.precio,cochenuevo.kmrecorridos,cochenuevo.matricula);
+			printf("%s \t %s\t %d\t %.2f\t %.2f\t %s\n",cochenuevo.marca,cochenuevo.modelo,cochenuevo.year,cochenuevo.precio,cochenuevo.kmrecorridos,cochenuevo.matricula);
 			
 			
 		}
 	}
 	fclose(pcoches); 
+	return 0;
+}
+int compracoche()
+	{
+	int i=0, marcaexiste=0,marcaexiste2=0,N=cuentalineas(),linea;//Línea tendrá el valor de la línea en la que esta
+	float presupuesto;
+	coches cochenuevo[N];
+	char matricula[8];// Matrícula del coche deseado
+	FILE *pcoches;
+	pcoches=fopen("Concesionario.txt","r");//Abro el fichero para leer y apuntar
+	fflush(stdin);
+	printf("Introduzca presupuesto para ver que coches hay en el catalogo:\n");
+	scanf("%f",&presupuesto);
+	
+	while (feof(pcoches) == 0) //Primero leemos los datos
+		{
+			fscanf(pcoches, "%[^;]; %[^;]; %d; %f; %f; %[^;]; %d; ",cochenuevo[i].marca,cochenuevo[i].modelo,&cochenuevo[i].year,&cochenuevo[i].precio,&cochenuevo[i].kmrecorridos,&cochenuevo[i].matricula,&cochenuevo[i].vendido);
+			i++;
+		}
+	for(i=0;i<N;i++)
+	{
+		if((presupuesto>=cochenuevo[i].precio)&&(cochenuevo[i].vendido==0))
+		{
+	
+			printf("%s %s %d %.2f %.2f %s\n",cochenuevo[i].marca,cochenuevo[i].modelo,cochenuevo[i].year,cochenuevo[i].precio,cochenuevo[i].kmrecorridos,cochenuevo[i].matricula);
+			marcaexiste=1;
+	
+		}
+	}
+	
+	if (marcaexiste<1)
+	{
+		printf("No hay coches por ese precio, estirese un poco");
+	}
+	
+	else
+	{
+		fflush(stdin);
+		printf("Introduzca matrícula del coche que desea:\n");
+		scanf("%s",matricula);
+		for(i=0;i<N;i++)
+		{
+			if (strcmp(matricula,cochenuevo[i].matricula)==0)//Busco el coche que quiero comprar, es decir el cual quiero cambiar de 1 a 0
+			{
+				printf("Efectuando su compra, demasiado tarde para arrepentirse\n");
+				linea=i;
+				cochenuevo[linea].vendido=1;
+				marcaexiste2=1;   	
+			}
+		}
+		if (marcaexiste2<1)
+		{
+			printf("No existe ningun coche asi en nuestro inventario\n");
+		}
+	}
+	fclose(pcoches);
+	pcoches=fopen("Concesionario.txt","w");//Abro el fichero esta vez para apuntar los cambios realizados
+	for(i=0;i<N;i++)
+	{
+		fprintf(pcoches, "%s; %s; %d; %.2f; %.2f; %s; %d; \n",cochenuevo[i].marca,cochenuevo[i].modelo,cochenuevo[i].year,cochenuevo[i].precio,cochenuevo[i].kmrecorridos,cochenuevo[i].matricula,cochenuevo[i].vendido);
+	}
+	fclose(pcoches);
 	return 0;
 }
 
